@@ -1,9 +1,21 @@
 import { useState } from "react";
+import cross_icon from "./Assets/cross.png";
+import circle_icon from "./Assets/circle.png";
 
 function Square({ color, value, onSquareClick }) {
+  let valueImg = null;
+  if (value === "X") {
+    valueImg = <img alt="" src={cross_icon}></img>;
+  } else if (value === "O") {
+    valueImg = <img alt="" src={circle_icon}></img>;
+  }
   return (
-    <button style={{ color: color }} className="square" onClick={onSquareClick}>
-      {value}
+    <button
+      style={{ borderColor: color }}
+      className="square"
+      onClick={onSquareClick}
+    >
+      {valueImg}
     </button>
   );
 }
@@ -69,7 +81,12 @@ function Board({ xIsNext, squares, onPlay, currentMove }) {
 
   return (
     <>
-      <div className="status">{status}</div>
+      <div
+        className="status"
+        style={{ color: status.includes("X") ? "#26ffcb" : "#d9cb08" }}
+      >
+        {status}
+      </div>
       {board}
     </>
   );
@@ -100,7 +117,7 @@ export default function Game() {
       description = `You are at move #${move}`;
       return (
         <li key={move}>
-          <span>
+          <span className="cur-move">
             {" "}
             {description} at ({his.location.x},{his.location.y})
           </span>
@@ -117,7 +134,9 @@ export default function Game() {
     }
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button className="move" onClick={() => jumpTo(move)}>
+          {description}
+        </button>
       </li>
     );
   });
@@ -137,10 +156,13 @@ export default function Game() {
         />
       </div>
       <div className="game-info">
-        <button onClick={() => setIsAscendingMoves(!isAscendingMoves)}>
+        <button
+          className="sort-move"
+          onClick={() => setIsAscendingMoves(!isAscendingMoves)}
+        >
           Sort {isAscendingMoves ? "Ascending" : "Descending"}
         </button>
-        <ol>{moves}</ol>
+        <ol style={{ listStyleType: "none" }}>{moves}</ol>
       </div>
     </div>
   );
